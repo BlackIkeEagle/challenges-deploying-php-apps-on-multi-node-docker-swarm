@@ -35,7 +35,6 @@
 
         <style>
             body { background: #253238; background-color: #253238 }
-            h2 { text-align: left; }
         </style>
 
         <!-- vim -->
@@ -61,12 +60,13 @@
 			<div class="slides">
 
 				<section>
-					<h2 style="text-align: center">Deploying PHP apps on</h2>
-                    <img style="border: 0" src="assets/docker-swarm-titleslide.png" />
-                    <h2 style="text-align: center">multi node docker swarm</h2>
+					<h2>Deploying PHP apps on</h2>
+                    <img style="border: 0; background: transparent; box-shadow: 0 0;" src="assets/docker-swarm-titleslide.png" />
+                    <h2>multi node docker swarm</h2>
 				</section>
 
                 <section>
+                    <h2>Ike Devolder</h2>
                     <img style="border: 0; border-radius: 20%;" src="assets/blackikeeagle.jpg" />
                     <br />
                     <a href="https://twitter.com/BlackIkeEagle">@BlackIkeEagle</a>
@@ -75,48 +75,204 @@
 
                 <section>
                     <section>
+                        <h2>Docker swarm</h2>
+                        <img style="border: 0; background: transparent; box-shadow: 0 0;" src="assets/docker-swarm-titleslide.png" />
+                        <aside class="notes">
+                            <ul>
+                                <li>load balancing</li>
+                                <li>service discovery</li>
+                                <li>cluster of docker engines</li>
+                                <li>exposes multiple dockers as "one"</li>
+                            </ul>
+                        </aside>
+                    </section>
+
+                    <section>
+                        <h2>concepts</h2>
+                        <ul>
+                            <li class="fragment">node</li>
+                            <li class="fragment">services</li>
+                            <li class="fragment">task</li>
+                        </ul>
+                        <aside class="notes">
+                            <ul>
+                                <li>node: a docker container engine, usually a different machine</li>
+                                <li>service: similar like you do docker run but with extra functionality</li>
+                                <li>task: the running container, for example: service fpm, 3 replicas, one of the fpm's is a task</li>
+                            </ul>
+                        </aside>
+                    </section>
+                </section>
+
+                <section>
+                    <section>
+                        <h2>Choosing the "right" base distribution</h2>
+                    </section>
+
+                    <section>
+                        <img src="assets/linode-supported-distibutions.png" alt="supported distributions" />
+                    </section>
+
+                    <section>
+                        <h2 style="color: red;">Bad</h2>
+                        <img src="assets/centos-logo.png" alt="centos" style="width: 100px; border: 0; background: transparent; box-shadow: 0 0; border-radius: 20%;" />
+                        <img src="assets/debian-logo.jpg" alt="debian" style="width: 100px; border: 0; background: transparent; box-shadow: 0 0; border-radius: 20%;" />
+                        <img src="assets/opensuse-logo.jpg" alt="fedora" style="width: 100px; border: 0; background: transparent; box-shadow: 0 0; border-radius: 20%;" />
+                        <aside class='notes'>
+                            <ul>
+                                <li>centos: kernel too old</li>
+                                <li>debian: unsupported by docker?</li>
+                                <li>opensuse: docker version too old</li>
+                            </ul>
+                        </aside>
+                    </section>
+
+                    <section>
+                        <h2 style="color: orange;">Intermediate</h2>
+                        <img src="assets/fedora-logo.png" alt="fedora" style="width: 100px; border: 0; background: transparent; box-shadow: 0 0; border-radius: 20%;" />
+                        <img src="assets/slackware-logo.jpg" alt="slackware" style="width: 100px; border: 0; background: transparent; box-shadow: 0 0; border-radius: 20%;" />
+                        <img src="assets/ubuntu-logo.png" alt="ubuntu" style="width: 100px; border: 0; background: white; box-shadow: 0 0; border-radius: 20%;" />
+                        <aside class='notes'>
+                            <ul>
+                                <li>fedora: supported by docker with own repo</li>
+                                <li>slackware: slackbuild available</li>
+                                <li>ubuntu: supported by docker with own repo</li>
+                            </ul>
+                        </aside>
+                    </section>
+
+                    <section>
+                        <h2 style="color: green;">Good</h2>
+                        <img src="assets/Arch-linux-logo.png" alt="arch linux" style="width: 100px; border: 0; background: white; box-shadow: 0 0; border-radius: 20%;" />
+                        <img src="assets/coreos-logo.png" alt="coreos" style="width: 100px; border: 0; background: transparent; box-shadow: 0 0; border-radius: 20%;" />
+                        <img src="assets/gentoo-logo.png" alt="gentoo" style="width: 100px; border: 0; background: transparent; box-shadow: 0 0; border-radius: 20%;" />
+                        <aside class='notes'>
+                            <ul>
+                                <li>archlinux: always up2date and in distro repo</li>
+                                <li>coreos: the container linux OS</li>
+                                <li>gentoo: always up2date and in distro repo</li>
+                            </ul>
+                        </aside>
+                    </section>
+
+                    <section>
+                        <h2>Good but not common with big hosters</h2>
+                        <img src="assets/alpinelinux-logo.png" alt="alpine linux" style="height: 100px; border: 0; background: white; box-shadow: 0 0; border-radius: 20%;" />
+                        <img src="assets/rancher-logo.jpg" alt="rancher" style="height: 100px; border: 0; background: transparent; box-shadow: 0 0; border-radius: 20%;" />
+                        <aside class='notes'>
+                            <ul>
+                                <li>alpine linux: super lightweight and up2date, perfect base for containers</li>
+                                <li>rancher: like coreos, build with and for containers, combination of rancher os and rancher ui</li>
+                            </ul>
+                        </aside>
+                    </section>
+                </section>
+
+                <section>
+                    <section>
+                        <h2>setup a swarm</h2>
+                    </section>
+
+                    <section>
+                        <h2>system</h2>
+                        <pre style="background-color: black;">
+$ pacman -S docker
+$ systemctl enable docker.service
+                        </pre>
+                    </section>
+
+                    <section>
+                        <h2>certificates</h2>
+                        <p>communication between client and server will be encrypted</p>
+                        <aside class="notes">
+                            We need certificates to allow tls encrypted communication between our client and the docker server
+                        </aside>
+                    </section>
+
+                    <section>
+                        <h2>client config</h2>
+                        <p>to communicate with our server(s) we have to setup some environment variables</p>
+                        <pre><code>
+export DOCKER_HOST=tcp://192.168.254.41:2375
+export DOCKER_CERT_PATH=$(pwd)/client-cert
+export DOCKER_TLS_VERIFY=1
+                        </code></pre>
+                        <aside class="notes">
+                            <ul>
+                                <li>host</li>
+                                <li>where to find the client certificates</li>
+                                <li>if we want tls verified</li>
+                                <li>exports should point to a "master" node</li>
+                            </ul>
+                        </aside>
+                    </section>
+
+                    <section>
+                        <h2>setup the swarm</h2>
+                        <pre style="background-color: black;">
+# docker swarm init \
+    --advertise-addr=[internal server ip]
+# docker swarm join-token \
+    -q worker
+# docker swarm join \
+    --token [worker token] \
+    [internal master server ip]
+                        </pre>
+                    </section>
+
+                    <section>
+                        <h2>check swarm status</h2>
+                        <pre style="background-color: black;">
+$ docker node ls
+$ docker service ls
+                        </pre>
+                    </section>
+                </section>
+
+                <section>
+                    <section>
                         <div style="width: 50%; display: inline-block; margin-right: 2%; vertical-align: top;">
-                            <h2>Questions?</h2>
+                            <h2 style="text-align: left">Questions?</h2>
                             <p style="text-align: left;"><a href="https://joind.in/talk/cd175">https://joind.in/talk/cd175</a></p>
+                            <h2 style="text-align: left">Ike Devolder</h2>
                         </div>
                         <div style="width: 46%; display: inline-block;">
-                            <a href="https://joind.in/talk/cd175"><img src="assets/joindinqr.png" alt="joindin qr" style="width: 220px; border: 0; background: transparent;" /></a>
+                            <a href="https://joind.in/talk/cd175"><img src="assets/joindinqr.png" alt="joindin qr" style="width: 220px; border: 0; background: transparent; box-shadow: 0 0;" /></a>
                         </div>
                         <p></p>
-                        <div style="width: 65%; display: inline-block; margin-right: 2%; vertical-align: top;">
-                            <h2>Ike Devolder</h2>
+                        <div style="vertical-align: top;">
                             <p style="text-align: left;"><a href="https://twitter.com/BlackIkeEagle">@BlackIkeEagle</a></p>
                             <p style="text-align: left;">Webdeveloper - <a href="https://www.studioemma.com">Studio Emma</a></p>
-                            <p style="text-align: left;"><a href="http://php-wvl.be">PHP-WVL</a></p>
-                            <p style="text-align: left;"><a href="https://archlinux.org">Arch Linux</a> Trusted User</p>
+                            <p style="text-align: left;"><a href="http://www.php-wvl.be">PHP-WVL</a> / <a href="https://dockerwest.github.io">Docker West</a> / <a href="https://www.archlinux.org">Arch Linux</a> Trusted User</p>
                         </div>
-                        <div style="width: 31%; display: inline-block;">
-                            <a href="https://www.studioemma.com"><img src="assets/se-logo.png" alt="studioemma" style="width: 80px; border: 0; background: transparent;" /></a><br />
-                            <a href="http://www.php-wvl.be"><img src="assets/php-wvl-logo.png" alt="php-wvl" style="width: 80px; border: 0; background: transparent;" /></a><br />
-                            <a href="https://www.archlinux.org"><img src="assets/Arch-linux-logo.png" alt="archlinux" style="width: 80px; border: 0; background: transparent;" /></a>
+                        <div>
+                            <a href="https://www.studioemma.com"><img src="assets/se-logo.png" alt="studioemma" style="width: 80px; border: 0; background: transparent; box-shadow: 0 0;" /></a>&nbsp;
+                            <a href="http://www.php-wvl.be"><img src="assets/php-wvl-logo.png" alt="php-wvl" style="width: 80px; border: 0; background: transparent; box-shadow: 0 0;" /></a>&nbsp;
+                            <a href="https://dockerwest.github.io"><img src="assets/docker-west.png" alt="docker west" style="width: 80px; border: 0; background: white; box-shadow: 0 0; border-radius: 5%;" /></a>&nbsp;
+                            <a href="https://www.archlinux.org"><img src="assets/Arch-linux-logo.png" alt="arch linux" style="width: 80px; border: 0; background: transparent; box-shadow: 0 0;" /></a>
                         </div>
                     </section>
 
                     <section data-transition="none">
                         <div style="width: 50%; display: inline-block; margin-right: 2%; vertical-align: top;">
-                            <h2>Thanks.</h2>
+                            <h2 style="text-align: left">Thanks.</h2>
                             <p style="text-align: left;"><a href="https://joind.in/talk/cd175">https://joind.in/talk/cd175</a></p>
+                            <h2 style="text-align: left">Ike Devolder</h2>
                         </div>
                         <div style="width: 46%; display: inline-block;">
-                            <a href="https://joind.in/talk/cd175"><img src="assets/joindinqr.png" alt="joindin qr" style="width: 220px; border: 0; background: transparent;" /></a>
+                            <a href="https://joind.in/talk/cd175"><img src="assets/joindinqr.png" alt="joindin qr" style="width: 220px; border: 0; background: transparent; box-shadow: 0 0;" /></a>
                         </div>
                         <p></p>
-                        <div style="width: 65%; display: inline-block; margin-right: 2%; vertical-align: top;">
-                            <h2>Ike Devolder</h2>
+                        <div style="vertical-align: top;">
                             <p style="text-align: left;"><a href="https://twitter.com/BlackIkeEagle">@BlackIkeEagle</a></p>
                             <p style="text-align: left;">Webdeveloper - <a href="https://www.studioemma.com">Studio Emma</a></p>
-                            <p style="text-align: left;"><a href="http://php-wvl.be">PHP-WVL</a></p>
-                            <p style="text-align: left;"><a href="https://archlinux.org">Arch Linux</a> Trusted User</p>
+                            <p style="text-align: left;"><a href="http://www.php-wvl.be">PHP-WVL</a> / <a href="https://dockerwest.github.io">Docker West</a> / <a href="https://www.archlinux.org">Arch Linux</a> Trusted User</p>
                         </div>
-                        <div style="width: 31%; display: inline-block;">
-                            <a href="https://www.studioemma.com"><img src="assets/se-logo.png" alt="studioemma" style="width: 80px; border: 0; background: transparent;" /></a><br />
-                            <a href="http://www.php-wvl.be"><img src="assets/php-wvl-logo.png" alt="php-wvl" style="width: 80px; border: 0; background: transparent;" /></a><br />
-                            <a href="https://www.archlinux.org"><img src="assets/Arch-linux-logo.png" alt="archlinux" style="width: 80px; border: 0; background: transparent;" /></a>
+                        <div>
+                            <a href="https://www.studioemma.com"><img src="assets/se-logo.png" alt="studioemma" style="width: 80px; border: 0; background: transparent; box-shadow: 0 0;" /></a>&nbsp;
+                            <a href="http://www.php-wvl.be"><img src="assets/php-wvl-logo.png" alt="php-wvl" style="width: 80px; border: 0; background: transparent; box-shadow: 0 0;" /></a>&nbsp;
+                            <a href="https://dockerwest.github.io"><img src="assets/docker-west.png" alt="docker west" style="width: 80px; border: 0; background: white; box-shadow: 0 0; border-radius: 5%;" /></a>&nbsp;
+                            <a href="https://www.archlinux.org"><img src="assets/Arch-linux-logo.png" alt="arch linux" style="width: 80px; border: 0; background: transparent; box-shadow: 0 0;" /></a>
                         </div>
                     </section>
                 </section>
