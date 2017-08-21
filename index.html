@@ -221,11 +221,71 @@ export DOCKER_TLS_VERIFY=1
                     </section>
 
                     <section>
-                        <h2>check swarm status</h2>
+                        <h2>simple check swarm status</h2>
                         <pre style="background-color: black;">
 $ docker node ls
 $ docker service ls
                         </pre>
+                    </section>
+                </section>
+
+                <section>
+                    <section>
+                        <h2>docker service</h2>
+                        <p>create/manage a single service within a swarm</p>
+                    </section>
+
+                    <section>
+                        <h2>overview</h2>
+                        <ul>
+                            <li class="fragment">docker service create</li>
+                            <li class="fragment">docker service inspect</li>
+                            <li class="fragment">docker service logs</li>
+                            <li class="fragment">docker service ls</li>
+                            <li class="fragment">docker service ps</li>
+                            <li class="fragment">docker service rm</li>
+                            <li class="fragment">docker service scale</li>
+                            <li class="fragment">docker service update</li>
+                        </ul>
+                        <aside>
+                            <ul>
+                                <li>create: create a service based on an image</li>
+                                <li>inspect: just like docker inspect, see in depth information about the service</li>
+                                <li>logs: view or tail the logs of a service</li>
+                                <li>ls: list the services in the swarm</li>
+                                <li>ps: list the tasks in a service</li>
+                                <li>rm: remove the service</li>
+                                <li>scale: change the number of tasks under the service</li>
+                                <li>update: update a service</li>
+                            </ul>
+                        </aside>
+                    </section>
+                </section>
+
+                <section>
+                    <section>
+                        <h2>docker stack</h2>
+                        <p>create/manage an application stack within a swarm</p>
+                    </section>
+
+                    <section>
+                        <h2>overview</h2>
+                        <ul>
+                            <li class="fragment">docker stack deploy</li>
+                            <li class="fragment">docker stack ls</li>
+                            <li class="fragment">docker stack ps</li>
+                            <li class="fragment">docker stack rm</li>
+                            <li class="fragment">docker stack services</li>
+                        </ul>
+                        <aside>
+                            <ul>
+                                <li>deploy: create/update a stack based on a configuration file</li>
+                                <li>ls: list the stacks in a swarm</li>
+                                <li>ps: list the tasks in a swarm</li>
+                                <li>rm: remove a stack from the swarm</li>
+                                <li>services: list the services in a stack</li>
+                            </ul>
+                        </aside>
                     </section>
                 </section>
 
